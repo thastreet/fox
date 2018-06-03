@@ -14,12 +14,10 @@ app.get('/', function (req, res) {
 })
 
 app.get('/login', function (req, res) {
-  console.log('login')
   res.redirect('https://www.strava.com/oauth/authorize?client_id=' + clientId + '&redirect_uri=' + redirectUri + '&response_type=code');
 })
 
 app.get('/login/response', function (req, res) {
-  console.log('response')
   const code = req.query.code
 
   request.post(
@@ -33,14 +31,15 @@ app.get('/login/response', function (req, res) {
         }
     },
     function (error, response, body) {
-      console.log('post')
       if (!error && response.statusCode == 200) {
         res.redirect('stravastreet://response?access_token=' + response.body.access_token);
+      } else {
+        res.redirect('stravastreet://response');
       }
     }
   );
 })
 
 app.listen(port, function () {
-  console.log('Example app listening on port ' + port)
+  console.log('Strava app listening on port ' + port)
 })
