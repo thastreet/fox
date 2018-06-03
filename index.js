@@ -36,6 +36,7 @@ app.get('/login/response', function (req, res) {
       console.log('post')
       if (!error && response.statusCode == 200) {
         res.sendStatus(200)
+        res.end()
       }
     }
   );
