@@ -6,7 +6,7 @@ const localPort = 8080
 const port = process.env.PORT || localPort
 
 const clientId = 26073
-const redirectUri = 'http://localhost:8080/login/response'
+const redirectUri = 'https://strava-street.herokuapp.com/login/response'
 
 app.get('/', function (req, res) {
   res.send('Hello World!')
