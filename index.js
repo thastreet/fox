@@ -1,5 +1,6 @@
-import express from 'express';
-import { post } from 'request';
+const express = require('express');
+const request = require('request');
+
 const app = express()
 
 const localPort = 8080
@@ -20,7 +21,7 @@ app.get('/login', function (req, res) {
 app.get('/login/response', function (req, res) {
   const code = req.query.code
 
-  post(
+  request.post(
     'https://www.strava.com/oauth/token',
     {
       json:
@@ -43,7 +44,7 @@ app.get('/login/response', function (req, res) {
 app.get('/refresh', function (req, res) {
   const refreshToken = req.query.refresh_token
 
-  post(
+  request.post(
     'https://www.strava.com/oauth/token',
     {
       json:
