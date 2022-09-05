@@ -1,5 +1,5 @@
-const express = require('express');
-const request = require('request');
+import express from 'express';
+import { post } from 'request';
 const app = express()
 
 const localPort = 8080
@@ -20,21 +20,45 @@ app.get('/login', function (req, res) {
 app.get('/login/response', function (req, res) {
   const code = req.query.code
 
-  request.post(
+  post(
     'https://www.strava.com/oauth/token',
     {
       json:
-        {
-          client_id: clientId,
-          client_secret: clientSecret,
-          code: code
-        }
+      {
+        client_id: clientId,
+        client_secret: clientSecret,
+        code: code
+      }
     },
     function (error, response, body) {
       if (!error && response.statusCode == 200) {
-        res.redirect('stravastreet://response?access_token=' + response.body.access_token);
+        res.redirect('stravastreet://login?result=success&access_token=' + response.body.access_token + "&refresh_token=" + response.body.refresh_token);
       } else {
-        res.redirect('stravastreet://response');
+        res.redirect('stravastreet://login?result=error');
+      }
+    }
+  );
+})
+
+app.get('/refresh', function (req, res) {
+  const refreshToken = req.query.refresh_token
+
+  post(
+    'https://www.strava.com/oauth/token',
+    {
+      json:
+      {
+        client_id: clientId,
+        client_secret: clientSecret,
+        grant_type: "refresh_token",
+        refresh_token: refreshToken
+      }
+    },
+    function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        res.redirect('stravastreet://refresh?result=success&access_token=' + response.body.access_token + "&refresh_token=" + response.body.refresh_token);
+      } else {
+        res.redirect('stravastreet://refresh?result=error');
       }
     }
   );
