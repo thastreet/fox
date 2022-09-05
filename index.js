@@ -56,7 +56,7 @@ app.get('/refresh', function (req, res) {
     },
     function (error, response, body) {
       if (!error && response.statusCode == 200) {
-        res.send(
+        res.json(
           {
             status: "success",
             accessToken: response.body.access_token,
@@ -64,7 +64,7 @@ app.get('/refresh', function (req, res) {
           }
         )
       } else {
-        res.send(
+        res.json(
           {
             status: "error",
             accessToken: null,
