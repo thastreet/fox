@@ -56,9 +56,21 @@ app.get('/refresh', function (req, res) {
     },
     function (error, response, body) {
       if (!error && response.statusCode == 200) {
-        res.redirect('stravastreet://refresh?result=success&access_token=' + response.body.access_token + "&refresh_token=" + response.body.refresh_token);
+        res.send(
+          {
+            status: "success",
+            accessToken: response.body.access_token,
+            refreshToken: response.body.refresh_token
+          }
+        )
       } else {
-        res.redirect('stravastreet://refresh?result=error');
+        res.send(
+          {
+            status: "error",
+            accessToken: null,
+            refreshToken: null
+          }
+        )
       }
     }
   );
