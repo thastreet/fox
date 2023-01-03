@@ -8,7 +8,7 @@ const port = process.env.PORT || localPort
 
 const clientId = 26073
 const clientSecret = process.env.CLIENT_SECRET
-const redirectUri = 'https://fox-thastreet.vercel.app/login/response'
+const redirectUri = 'https://gold-glamorous-goldfish.cyclic.app/login/response'
 
 app.get('/', function (req, res) {
   res.send('Hello World!')
