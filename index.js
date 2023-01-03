@@ -3,7 +3,7 @@ const request = require('request')
 
 const app = express()
 
-app.use(bodyParser.urlencoded())
+app.use(express.urlencoded({extended: true}))
 
 const localPort = 8080
 const port = process.env.PORT || localPort
@@ -64,8 +64,8 @@ app.get('/login/spotify/response', function (req, res) {
     },
     function (error, response, body) {
       if (!error && response.statusCode == 200) {
-        console.log(response.body)
-        res.redirect('fox://login?state=spotify&result=success&access_token=' + response.body.access_token + "&refresh_token=" + response.body.refresh_token)
+        let data = JSON.parse(response.body)
+        res.redirect('fox://login?state=spotify&result=success&access_token=' + data.access_token + "&refresh_token=" + data.refresh_token)
       } else {
         res.redirect('fox://login?state=spotify&result=error')
       }
