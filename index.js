@@ -15,7 +15,7 @@ app.get('/', function (req, res) {
 })
 
 app.get('/login', function (req, res) {
-  res.redirect('https://www.strava.com/oauth/authorize?client_id=' + clientId + '&redirect_uri=' + redirectUri + '&response_type=code&scope=profile:read_all');
+  res.redirect('https://www.strava.com/oauth/authorize?client_id=' + clientId + '&redirect_uri=' + redirectUri + '&response_type=code&scope=profile:read_all,activity:read_all,activity:write');
 })
 
 app.get('/login/response', function (req, res) {
