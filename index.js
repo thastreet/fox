@@ -8,17 +8,17 @@ const port = process.env.PORT || localPort
 
 const clientId = 26073
 const clientSecret = process.env.CLIENT_SECRET
-const redirectUri = 'https://gold-glamorous-goldfish.cyclic.app/login/response'
+const stravaRedirectUri = 'https://gold-glamorous-goldfish.cyclic.app/login/strava/response'
 
 app.get('/', function (req, res) {
   res.send('Hello World!')
 })
 
-app.get('/login', function (req, res) {
-  res.redirect('https://www.strava.com/oauth/authorize?client_id=' + clientId + '&redirect_uri=' + redirectUri + '&response_type=code&scope=profile:read_all,activity:read_all,activity:write');
+app.get('/login/strava', function (req, res) {
+  res.redirect('https://www.strava.com/oauth/authorize?client_id=' + clientId + '&redirect_uri=' + stravaRedirectUri + '&response_type=code&scope=profile:read_all,activity:read_all,activity:write');
 })
 
-app.get('/login/response', function (req, res) {
+app.get('/login/strava/response', function (req, res) {
   const code = req.query.code
 
   request.post(
@@ -33,15 +33,15 @@ app.get('/login/response', function (req, res) {
     },
     function (error, response, body) {
       if (!error && response.statusCode == 200) {
-        res.redirect('stravastreet://login?result=success&access_token=' + response.body.access_token + "&refresh_token=" + response.body.refresh_token);
+        res.redirect('fox://login?state=strava&result=success&access_token=' + response.body.access_token + "&refresh_token=" + response.body.refresh_token);
       } else {
-        res.redirect('stravastreet://login?result=error');
+        res.redirect('fox://login?state=strava&result=error');
       }
     }
   );
 })
 
-app.get('/refresh', function (req, res) {
+app.get('/refresh/strava', function (req, res) {
   const refreshToken = req.query.refresh_token
 
   request.post(
