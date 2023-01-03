@@ -1,7 +1,11 @@
-const express = require('express');
-const request = require('request');
+const express = require('express')
+const request = require('request')
 
 const app = express()
+
+app.use(express.urlencoded({
+  extended: true
+}))
 
 const localPort = 8080
 const port = process.env.PORT || localPort
@@ -19,11 +23,11 @@ app.get('/', function (req, res) {
 })
 
 app.get('/login/strava', function (req, res) {
-  res.redirect('https://www.strava.com/oauth/authorize?client_id=' + stravaClientId + '&redirect_uri=' + stravaRedirectUri + '&response_type=code&scope=profile:read_all,activity:read_all,activity:write');
+  res.redirect('https://www.strava.com/oauth/authorize?client_id=' + stravaClientId + '&redirect_uri=' + stravaRedirectUri + '&response_type=code&scope=profile:read_all,activity:read_all,activity:write')
 })
 
 app.get('/login/spotify', function (req, res) {
-  res.redirect('https://accounts.spotify.com/authorize?client_id=' + spotifyClientId + '&redirect_uri=' + spotifyRedirectUri + '&response_type=code&scope=user-read-recently-played');
+  res.redirect('https://accounts.spotify.com/authorize?client_id=' + spotifyClientId + '&redirect_uri=' + spotifyRedirectUri + '&response_type=code&scope=user-read-recently-played')
 })
 
 app.get('/login/strava/response', function (req, res) {
@@ -41,12 +45,12 @@ app.get('/login/strava/response', function (req, res) {
     },
     function (error, response, body) {
       if (!error && response.statusCode == 200) {
-        res.redirect('fox://login?state=strava&result=success&access_token=' + response.body.access_token + "&refresh_token=" + response.body.refresh_token);
+        res.redirect('fox://login?state=strava&result=success&access_token=' + response.body.access_token + "&refresh_token=" + response.body.refresh_token)
       } else {
-        res.redirect('fox://login?state=strava&result=error');
+        res.redirect('fox://login?state=strava&result=error')
       }
     }
-  );
+  )
 })
 
 app.get('/login/spotify/response', function (req, res) {
@@ -63,12 +67,12 @@ app.get('/login/spotify/response', function (req, res) {
     function (error, response, body) {
       if (!error && response.statusCode == 200) {
         console.log(response.body)
-        res.redirect('fox://login?state=spotify&result=success&access_token=' + response.body.access_token + "&refresh_token=" + response.body.refresh_token);
+        res.redirect('fox://login?state=spotify&result=success&access_token=' + response.body.access_token + "&refresh_token=" + response.body.refresh_token)
       } else {
-        res.redirect('fox://login?state=spotify&result=error');
+        res.redirect('fox://login?state=spotify&result=error')
       }
     }
-  );
+  )
 })
 
 app.get('/refresh/strava', function (req, res) {
@@ -104,7 +108,7 @@ app.get('/refresh/strava', function (req, res) {
         )
       }
     }
-  );
+  )
 })
 
 app.listen(port, function () {
