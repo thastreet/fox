@@ -61,9 +61,8 @@ app.get('/login/spotify/response', function (req, res) {
       }
     },
     function (error, response, body) {
-      console.log(error)
-      console.log(response)
       if (!error && response.statusCode == 200) {
+        console.log(response.body)
         res.redirect('fox://login?state=spotify&result=success&access_token=' + response.body.access_token + "&refresh_token=" + response.body.refresh_token);
       } else {
         res.redirect('fox://login?state=spotify&result=error');
