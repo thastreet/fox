@@ -59,7 +59,7 @@ app.get('/login/spotify/response', function (req, res) {
       {
         grant_type: "authorization_code",
         code: code,
-        redirect_uri: spotifyRedirectUri + '&response_type=code&scope=user-read-recently-played'
+        redirect_uri: spotifyRedirectUri
       },
       headers: {
         'Authorization': 'Basic ' + (Buffer.from(spotifyClientId + ':' + spotifyClientSecret, 'utf-8').toString('base64'))
