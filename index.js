@@ -53,14 +53,8 @@ app.get('/login/spotify/response', function (req, res) {
   const code = req.query.code
 
   request.post(
-    'https://accounts.spotify.com/api/token',
+    'https://accounts.spotify.com/api/token?grant_type=authorization_code&code=' + code + '&redirect_uri=' + spotifyRedirectUri,
     {
-      json:
-      {
-        grant_type: "authorization_code",
-        code: code,
-        redirect_uri: spotifyRedirectUri
-      },
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': 'Basic ' + (Buffer.from(spotifyClientId + ':' + spotifyClientSecret, 'utf-8').toString('base64'))
