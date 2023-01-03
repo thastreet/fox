@@ -6,16 +6,24 @@ const app = express()
 const localPort = 8080
 const port = process.env.PORT || localPort
 
-const clientId = 26073
-const clientSecret = process.env.CLIENT_SECRET
+const stravaClientId = 26073
+const stravaClientSecret = process.env.STRAVA_CLIENT_SECRET
 const stravaRedirectUri = 'https://gold-glamorous-goldfish.cyclic.app/login/strava/response'
+
+const spotifyClientId = "8c1f114b54644b92838df9529358a3d4"
+const spotifyClientSecret = process.env.SPOTIFY_CLIENT_SECRET
+const spotifyRedirectUri = 'https://gold-glamorous-goldfish.cyclic.app/login/spotify/response'
 
 app.get('/', function (req, res) {
   res.send('Hello World!')
 })
 
 app.get('/login/strava', function (req, res) {
-  res.redirect('https://www.strava.com/oauth/authorize?client_id=' + clientId + '&redirect_uri=' + stravaRedirectUri + '&response_type=code&scope=profile:read_all,activity:read_all,activity:write');
+  res.redirect('https://www.strava.com/oauth/authorize?client_id=' + stravaClientId + '&redirect_uri=' + stravaRedirectUri + '&response_type=code&scope=profile:read_all,activity:read_all,activity:write');
+})
+
+app.get('/login/spotify', function (req, res) {
+  res.redirect('https://accounts.spotify.com/authorize?client_id=' + spotifyClientId + '&redirect_uri=' + spotifyRedirectUri + '&response_type=code&scope=user-read-recently-played');
 })
 
 app.get('/login/strava/response', function (req, res) {
@@ -26,8 +34,8 @@ app.get('/login/strava/response', function (req, res) {
     {
       json:
       {
-        client_id: clientId,
-        client_secret: clientSecret,
+        client_id: stravaClientId,
+        client_secret: stravaClientSecret,
         code: code
       }
     },
@@ -36,6 +44,29 @@ app.get('/login/strava/response', function (req, res) {
         res.redirect('fox://login?state=strava&result=success&access_token=' + response.body.access_token + "&refresh_token=" + response.body.refresh_token);
       } else {
         res.redirect('fox://login?state=strava&result=error');
+      }
+    }
+  );
+})
+
+app.get('/login/spotify/response', function (req, res) {
+  const code = req.query.code
+
+  request.post(
+    'https://accounts.spotify.com/api/token',
+    {
+      json:
+      {
+        grant_type: "authorization_code",
+        code: code,
+        redirect_uri: spotifyRedirectUri + '&response_type=code&scope=user-read-recently-played'
+      }
+    },
+    function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        res.redirect('fox://login?state=spotify&result=success&access_token=' + response.body.access_token + "&refresh_token=" + response.body.refresh_token);
+      } else {
+        res.redirect('fox://login?state=spotify&result=error');
       }
     }
   );
