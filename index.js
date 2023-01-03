@@ -3,9 +3,7 @@ const request = require('request')
 
 const app = express()
 
-app.use(express.urlencoded({
-  extended: true
-}))
+app.use(bodyParser.urlencoded())
 
 const localPort = 8080
 const port = process.env.PORT || localPort
